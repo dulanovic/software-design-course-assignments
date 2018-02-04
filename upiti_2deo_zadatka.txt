@@ -1,0 +1,61 @@
+- januar 2015
+SELECT CONCAT(p.ime,' ',p.prezime) AS Mentor,CONCAT(s.ime,' ',s.prezime) AS Student,s.brojindeksa 'Broj indeksa',s.godinaupisa AS 'Godina upisa',tabela.nazivstatusa AS 'Status rada' FROM rad r INNER JOIN (SELECT * FROM istorijastatusarada isr INNER JOIN statusrada sr ON (isr.statusradaid=sr.statusid)) AS tabela ON (r.radid=tabela.radid) INNER JOIN student s ON (r.studentid=s.studentid) INNER JOIN profesor p ON (r.profesorid=p.profesorid) ORDER BY s.godinaupisa,tabela.datum ASC
+
+
+
+- jun 2015(predrok)
+SELECT d.naziv, SUM(g.brojpoena) AS 'Broj poena' FROM drzava d INNER JOIN glasanje g ON (d.drzavaid=g.zadrzavaid) GROUP BY d.drzavaid ORDER BY 'Broj poena' DESC
+
+	public static List<Drzava> izvrsiRangiranje(List<Drzava> lista) {
+        	int rang = 1;
+        	int rang2 = 1;
+        	int trenutniBrojPoena = lista.get(0).getBrojPoena();
+
+        	for (Drzava d : lista) {
+            	if (d.brojPoena == trenutniBrojPoena) {
+                	d.setRang(rang);
+                	trenutniBrojPoena = d.brojPoena;
+                	rang2++;
+            	} else {
+                	rang = rang2;
+                	d.setRang(rang);
+                	rang2++;
+            	}
+        	}
+        	return lista;
+    	}
+
+
+
+- jun 2015
+SELECT CONCAT(m.ime,' ',m.prezime) AS Model, COUNT(*) AS Brojrevija, SUM(a.zarada) AS Ukupnazarada, SUM(a.brojsati) AS Ukupanbrojsati FROM model m INNER JOIN angazovanje a ON (m.modelid=a.modelid) GROUP BY m.modelid ORDER BY Brojrevija ASC, Ukupnazarada DESC
+
+
+
+- septembar 2015 g1
+SELECT k.naziv, k.tip, SUM(sk.kolicina) AS brojugradjenihkomada, SUM(sk.iznos) AS iznos FROM komponenta k INNER JOIN stavkakonfiguracije sk ON (sk.komponentaid=k.komponentaid) GROUP BY k.komponentaid ORDER BY brojugradjenihkomada DESC, iznos DESC
+
+
+
+- septembar 2015 g2
+SELECT CONCAT(k.ime,' ',k.prezime) AS kandidat, k.brojpoenaskola, p.brojpoenaprijemni, k.brojpoenaskola+p.brojpoenaprijemni AS poenaukupno FROM prijemniispit p INNER JOIN kandidat k ON (p.kandidatid=k.kandidatid) INNER JOIN studijskiprogram sp ON (p.studijskiprogramid=sp.studijskiprogramid) WHERE sp.naziv='PROMENLJIVI DEO UPITA' GROUP BY k.kandidatid, p.studijskiprogramid ORDER BY poenaukupno DESC
+
+
+
+- novembar 2015
+SELECT k.naziv,k.autor,i.naziv,SUM(sr.kolicina) AS brojprodatihprimeraka,SUM(sr.iznosstavke) AS prihod FROM knjiga k INNER JOIN izdavac i ON (k.izdavacid=i.izdavacid) INNER JOIN stavkaracuna sr ON (k.knjigaid=sr.knjigaid) GROUP BY k.knjigaid ORDER BY brojprodatihprimeraka DESC, prihod DESC
+
+
+
+- februar 2016
+SELECT k.naziv,SUM(r.ukupaniznos) AS ukupaniznosracuna FROM klijent k INNER JOIN racun r ON (k.klijentid=r.klijentid) GROUP BY k.klijentid
+
+
+
+- jun 2016 g1
+SELECT p.naziv,vp.naziv,COUNT(*) AS brojangazovanih FROM projekat p INNER JOIN vrstaprojekta vp ON (p.vrstaid=vp.vrstaprojekta) INNER JOIN angazovanje a ON (p.projekatid=a.projekatid) GROUP BY p.projekatid
+
+
+
+- jun 2016 g2
+SELECT CONCAT(n.ime,' ',n.prezime) AS Nastavnik,COUNT(*) AS UkupanBrDezurstava,SUM(p.trajanjeispita/60) AS UkupanBrSati,SUM(p.trajanjeispita/60)*10 AS UkupnoZaIsplatu FROM dezurstvo d INNER JOIN nastavnik n ON (d.nastavnikid=n.nastavnikid) INNER JOIN predmet p ON (d.predmetid=p.predmetid) GROUP BY n.nastavnikid ORDER BY UkupnoZaIsplatu DESC
